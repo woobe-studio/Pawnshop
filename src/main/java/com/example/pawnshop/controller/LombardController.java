@@ -29,7 +29,7 @@ public class LombardController {
         int id = view.getItemId();
         Item existingItem = repository.getItemById(id);
         if (existingItem != null) {
-            System.out.println("Updating item: " + existingItem);
+            view.displayMessage("Updating item: " + existingItem);
             Item updatedItem = view.getItemDetails();
             repository.updateItem(id, updatedItem.getName(), updatedItem.getCategory(), updatedItem.getValue());
             view.displayMessage("Item updated successfully!");
