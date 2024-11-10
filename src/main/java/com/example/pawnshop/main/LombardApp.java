@@ -22,7 +22,7 @@ public class LombardApp {
                     controller.addItem();
                     break;
                 case 2:
-                    controller.viewItems();
+                    controller.viewItems();  // Now handles sorting
                     break;
                 case 3:
                     controller.updateItem();
@@ -33,12 +33,10 @@ public class LombardApp {
                 case 5:
                     controller.exit();
                     return; // Exit the program
-                case 6:
-                    controller.viewTransactionHistory();
-                    break;
                 default:
                     view.displayMessage("Invalid choice. Please try again.");
             }
         }
     }
 }
+

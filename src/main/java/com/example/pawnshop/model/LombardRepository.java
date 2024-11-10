@@ -1,5 +1,6 @@
 package com.example.pawnshop.model;
 
+import java.util.Comparator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -50,6 +51,26 @@ public class LombardRepository {
             }
         }
         return null;
+    }
+
+    // Sort items by ID in ascending order
+    public void sortItemsByIdAscending() {
+        items.sort(Comparator.comparingInt(Item::getId));
+    }
+
+    // Sort items by ID in descending order
+    public void sortItemsByIdDescending() {
+        items.sort((item1, item2) -> Integer.compare(item2.getId(), item1.getId()));
+    }
+
+    // Sort items by price in ascending order
+    public void sortItemsByPriceAscending() {
+        items.sort(Comparator.comparingDouble(Item::getValue));
+    }
+
+    // Sort items by price in descending order
+    public void sortItemsByPriceDescending() {
+        items.sort((item1, item2) -> Double.compare(item2.getValue(), item1.getValue()));
     }
 
     // Save items to a JSON file
