@@ -1,6 +1,5 @@
 package com.example.pawnshop.view;
 
-
 import com.example.pawnshop.model.Item;
 
 import java.util.List;
@@ -10,7 +9,6 @@ public class ConsoleView {
 
     private Scanner scanner = new Scanner(System.in);
 
-    // Display the main menu
     public void displayMenu() {
         System.out.println("\nLombard Application");
         System.out.println("1. Add Item");
@@ -18,10 +16,10 @@ public class ConsoleView {
         System.out.println("3. Update Item");
         System.out.println("4. Remove Item");
         System.out.println("5. Exit");
+        System.out.println("6. View Transaction History");
         System.out.print("Choose an option: ");
     }
 
-    // Display a list of items
     public void displayItems(List<Item> items) {
         if (items.isEmpty()) {
             System.out.println("No items available.");
@@ -32,12 +30,10 @@ public class ConsoleView {
         }
     }
 
-    // Get user's choice from the menu
     public int getChoice() {
         return scanner.nextInt();
     }
 
-    // Prompt the user for item details to add or update an item
     public Item getItemDetails() {
         System.out.print("Enter ID: ");
         int id = scanner.nextInt();
@@ -52,14 +48,23 @@ public class ConsoleView {
         return new Item(id, name, category, value, "Available");
     }
 
-    // Prompt the user for an item ID (to update or remove an item)
     public int getItemId() {
         System.out.print("Enter the ID of the item to update/remove: ");
         return scanner.nextInt();
     }
 
-    // Display a message to the user
     public void displayMessage(String message) {
         System.out.println(message);
+    }
+
+    public void displayHistory(List<String> history) {
+        if (history.isEmpty()) {
+            System.out.println("No history available.");
+        } else {
+            System.out.println("\nTransaction History:");
+            for (String entry : history) {
+                System.out.println(entry);
+            }
+        }
     }
 }

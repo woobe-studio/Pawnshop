@@ -1,8 +1,8 @@
 package com.example.pawnshop.main;
 
-
 import com.example.pawnshop.controller.LombardController;
 import com.example.pawnshop.model.LombardRepository;
+import com.example.pawnshop.model.TransactionHistory;
 import com.example.pawnshop.view.ConsoleView;
 
 public class LombardApp {
@@ -10,7 +10,8 @@ public class LombardApp {
     public static void main(String[] args) {
         LombardRepository repository = new LombardRepository();
         ConsoleView view = new ConsoleView();
-        LombardController controller = new LombardController(repository, view);
+        TransactionHistory transactionHistory = new TransactionHistory();
+        LombardController controller = new LombardController(repository, view, transactionHistory);
 
         while (true) {
             view.displayMenu();
@@ -32,6 +33,9 @@ public class LombardApp {
                 case 5:
                     controller.exit();
                     return; // Exit the program
+                case 6:
+                    controller.viewTransactionHistory();
+                    break;
                 default:
                     view.displayMessage("Invalid choice. Please try again.");
             }

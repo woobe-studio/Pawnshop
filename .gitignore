@@ -39,3 +39,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+items.json
+transaction_history.json
