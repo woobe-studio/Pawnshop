@@ -40,6 +40,7 @@ public class LombardController {
     public void viewItems() {
         // Prompt user for sorting choice first
         view.clearScreen();
+        view.playSound("go.wav");
         view.displaySortMenu();
         int choice = view.getSortChoice();
 
@@ -65,6 +66,7 @@ public class LombardController {
                 view.displayMessage("Items not sorted.");
                 break;
             case 6:
+                view.playSound("go.wav");
                 return;
             default:
                 view.displayMessage("Invalid choice.");

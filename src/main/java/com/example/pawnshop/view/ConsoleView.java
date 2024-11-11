@@ -236,7 +236,7 @@ public class ConsoleView {
         System.out.println("Loading Complete!");
     }
 
-    public static void playSound(String soundFilePath) {
+    public void playSound(String soundFilePath) {
         try {
             File soundFile = new File("sounds/" + soundFilePath);  // Specify the path to your .wav file
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
