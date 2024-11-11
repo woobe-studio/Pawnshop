@@ -32,7 +32,7 @@ public class LombardApp {
                     break;
                 case 5:
                     controller.viewTransactionHistory();
-
+                    break;
                 case 6:
                     controller.exit();
                     return; // Exit the program
