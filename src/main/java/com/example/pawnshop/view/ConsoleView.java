@@ -1,7 +1,6 @@
 package com.example.pawnshop.view;
 
 import com.example.pawnshop.model.Item;
-
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,7 +15,8 @@ public class ConsoleView {
         System.out.println("2. View Items");
         System.out.println("3. Update Item");
         System.out.println("4. Remove Item");
-        System.out.println("5. Exit");
+        System.out.println("5. View Transaction History");
+        System.out.println("6. Exit");
         System.out.print("Choose an option: ");
     }
 

@@ -31,6 +31,9 @@ public class LombardApp {
                     controller.removeItem();
                     break;
                 case 5:
+                    controller.viewTransactionHistory();
+
+                case 6:
                     controller.exit();
                     return; // Exit the program
                 default:

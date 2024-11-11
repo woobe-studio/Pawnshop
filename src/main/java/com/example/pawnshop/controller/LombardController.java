@@ -17,6 +17,37 @@ public class LombardController {
         this.transactionHistory = transactionHistory;
     }
 
+    public void run() {
+        boolean running = true;
+        while (running) {
+            view.displayMenu();
+            int choice = view.getChoice();
+            switch (choice) {
+                case 1:
+                    addItem();
+                    break;
+                case 2:
+                    viewItems();
+                    break;
+                case 3:
+                    updateItem();
+                    break;
+                case 4:
+                    removeItem();
+                    break;
+                case 5:
+                    viewTransactionHistory();
+                    break;
+                case 6:
+                    exit();
+                    running = false;
+                    break;
+                default:
+                    view.displayMessage("Invalid choice. Please try again.");
+            }
+        }
+    }
+
     public void addItem() {
         Item item = view.getItemDetails();
 
