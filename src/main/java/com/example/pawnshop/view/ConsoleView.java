@@ -2,8 +2,11 @@ package com.example.pawnshop.view;
 
 import com.example.pawnshop.model.Item;
 
+import javax.sound.sampled.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -24,16 +27,17 @@ public class ConsoleView {
 
     private int selectedOption = 0;  // Track currently selected menu option
     private final String[] menuOptions = {
-            "Add Item",
-            "View Items",
-            "Update Item",
-            "Remove Item",
+            "        Add Item        ",
+            "       View Items       ",
+            "       Update Item      ",
+            "       Remove Item      ",
             "View Transaction History",
-            "Exit"
+            "          Exit          "
     };
 
     // Display the main menu with highlight for the selected option
     public void displayMenu() {
+        clearScreen();
         System.out.print(CYAN + "==================== Lombard Application ====================" + RESET + "\n");
         for (int i = 0; i < menuOptions.length; i++) {
             if (i == selectedOption) {
@@ -56,9 +60,11 @@ public class ConsoleView {
             switch (input) {
                 case "W": // Move up
                     selectedOption = (selectedOption - 1 + menuOptions.length) % menuOptions.length;
+                    playSound("enter.wav");
                     break;
                 case "S": // Move down
                     selectedOption = (selectedOption + 1) % menuOptions.length;
+                    playSound("enter.wav");
                     break;
                 case "": // Enter key pressed
                     return selectedOption + 1; // Return the selected option
@@ -116,30 +122,39 @@ public class ConsoleView {
     // Prompt the user for an item ID (to update or remove an item)
     public int getItemId() {
         System.out.print(YELLOW + "Enter the ID of the item to update/remove: " + RESET);
-        return scanner.nextInt();
+        int itemId = scanner.nextInt();
+        scanner.nextLine(); // Clear the leftover newline
+        return itemId;
     }
 
     // Display a message to the user with a visual emphasis
     public void displayMessage(String message) {
         System.out.println(GREEN + message + RESET);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // Display sorting options with a box
     public void displaySortMenu() {
-        clearScreen();
         System.out.println(CYAN + "==================== Sort Options ====================" + RESET);
-        System.out.println("| " + GREEN + "1." + RESET + " Sort by ID (Ascending)        |");
-        System.out.println("| " + GREEN + "2." + RESET + " Sort by ID (Descending)       |");
-        System.out.println("| " + GREEN + "3." + RESET + " Sort by Price (Ascending)    |");
-        System.out.println("| " + GREEN + "4." + RESET + " Sort by Price (Descending)   |");
-        System.out.println("| " + GREEN + "5." + RESET + " Do not sort                  |");
+        System.out.println("| " + GREEN + "1." + RESET + "   Sort by ID (Ascending)     |");
+        System.out.println("| " + GREEN + "2." + RESET + "   Sort by ID (Descending)    |");
+        System.out.println("| " + GREEN + "3." + RESET + "  Sort by Price (Ascending)   |");
+        System.out.println("| " + GREEN + "4." + RESET + "  Sort by Price (Descending)  |");
+        System.out.println("| " + GREEN + "5." + RESET + "         Do not sort          |");
+        System.out.println("| " + GREEN + "6." + RESET + "           Go Back            |");
         System.out.println("============================================================");
         System.out.print(YELLOW + "Choose a sorting option: " + RESET);
     }
 
     // Get sorting choice
     public int getSortChoice() {
-        return scanner.nextInt();
+        int itemId = scanner.nextInt();
+        scanner.nextLine(); // Clear the leftover newline
+        return itemId;
     }
 
     // Display transaction history in a box
@@ -167,7 +182,7 @@ public class ConsoleView {
     }
 
     // Simulate the clearing of the screen
-    public static void clearScreen() {
+    public void clearScreen() {
         try {
             // Create Robot instance to simulate key press
             Robot robot = new Robot();
@@ -189,7 +204,7 @@ public class ConsoleView {
     }
 
     // Simulate the loading progress with ASCII art
-    public static void showLoading() {
+    public void showLoading() {
         String[] loadingStates = {
                 "[          ]",
                 "[=         ]",
@@ -203,6 +218,7 @@ public class ConsoleView {
                 "[========= ]",
                 "[==========]"
         };
+        playSound("loading.wav");
         clearScreen();
         // Simulate a 5-second loading progress with delays
         for (int i = 0; i < loadingStates.length; i++) {
@@ -218,5 +234,17 @@ public class ConsoleView {
         // After the progress is complete, print the completion message
         System.out.println();  // Move to the next line after the loading bar is complete
         System.out.println("Loading Complete!");
+    }
+
+    public static void playSound(String soundFilePath) {
+        try {
+            File soundFile = new File("sounds/" + soundFilePath);  // Specify the path to your .wav file
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.start();  // Play the sound
+        } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
+            System.out.println(RED + "Error playing sound: " + e.getMessage() + RESET);
+        }
     }
 }

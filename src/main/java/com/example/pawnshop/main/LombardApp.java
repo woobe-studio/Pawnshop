@@ -22,7 +22,7 @@ public class LombardApp {
                     controller.addItem();
                     break;
                 case 2:
-                    controller.viewItems();  // Now handles sorting
+                    controller.viewItems();
                     break;
                 case 3:
                     controller.updateItem();
