@@ -46,9 +46,19 @@ public class ConsoleView {
             System.out.println("| " + BLUE + "ID" + RESET + "   | " + MAGENTA + "Name" + RESET + "    | " + CYAN + "Category" + RESET + " | " + GREEN + "Value" + RESET + "  | " + YELLOW + "Status" + RESET + " |");
             System.out.println("------------------------------------------------------------");
             for (Item item : items) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 System.out.println("| " + BLUE + item.getId() + RESET + "   | " + MAGENTA + item.getName() + RESET + "    | " + CYAN + item.getCategory() + RESET + " | " + GREEN + item.getValue() + RESET + "  | " + YELLOW + item.getStatus() + RESET + " |");
             }
             System.out.println("============================================================");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -109,9 +119,19 @@ public class ConsoleView {
         } else {
             System.out.println(CYAN + "==================== Transaction History ====================" + RESET);
             for (String entry : history) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 System.out.println("| " + BLUE + entry + RESET + " |");
             }
             System.out.println("============================================================");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -130,7 +150,7 @@ public class ConsoleView {
             robot.keyRelease(KeyEvent.VK_CONTROL);  // Release Ctrl
 
             // You can use a delay to ensure the terminal clears properly
-            Thread.sleep(5);  // Short delay to allow the screen to clear
+            Thread.sleep(50);  // Short delay to allow the screen to clear
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -158,7 +178,7 @@ public class ConsoleView {
             // Print the loading bar on the same line using \r (carriage return)
             System.out.print("\rLoading... " + loadingStates[i]);  // Overwrite the previous line
             try {
-                Thread.sleep(500);  // Delay of 500ms (half a second) between each update
+                Thread.sleep(300);  // Delay of 500ms (half a second) between each update
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
