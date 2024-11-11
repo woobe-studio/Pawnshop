@@ -2,11 +2,10 @@ package com.example.pawnshop.view;
 
 import com.example.pawnshop.model.Item;
 
+import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.Scanner;
-
-import java.awt.Robot;
-import java.awt.event.KeyEvent;
 
 public class ConsoleView {
 
@@ -23,17 +22,53 @@ public class ConsoleView {
     private static final String MAGENTA = "\033[35m";
     private static final String WHITE = "\033[37m";
 
-    // Display the main menu with an ASCII box
+    private int selectedOption = 0;  // Track currently selected menu option
+    private final String[] menuOptions = {
+            "Add Item",
+            "View Items",
+            "Update Item",
+            "Remove Item",
+            "View Transaction History",
+            "Exit"
+    };
+
+    // Display the main menu with highlight for the selected option
     public void displayMenu() {
-        System.out.println(CYAN + "==================== Lombard Application ====================" + RESET);
-        System.out.println("| " + GREEN + "1. Add Item" + RESET + "                    |");
-        System.out.println("| " + GREEN + "2. View Items" + RESET + "                   |");
-        System.out.println("| " + GREEN + "3. Update Item" + RESET + "                 |");
-        System.out.println("| " + GREEN + "4. Remove Item" + RESET + "                 |");
-        System.out.println("| " + GREEN + "5. View Transaction History" + RESET + "     |");
-        System.out.println("| " + GREEN + "6. Exit" + RESET + "                        |");
-        System.out.println("============================================================");
-        System.out.print(YELLOW + "Choose an option: " + RESET);
+        System.out.print(CYAN + "==================== Lombard Application ====================" + RESET + "\n");
+        for (int i = 0; i < menuOptions.length; i++) {
+            if (i == selectedOption) {
+                // Highlight the selected option
+                System.out.print("| " + RED + (i + 1) + ". " + menuOptions[i] + RESET + " |" + "\n");
+            } else {
+                // Normal color for other options
+                System.out.print("| " + GREEN + (i + 1) + ". " + menuOptions[i] + RESET + " |" + "\n");
+            }
+        }
+        System.out.print("============================================================\n");
+        System.out.print(YELLOW + "Use 'W' to move up, 'S' to move down, and Enter to select." + RESET + "\n");
+    }
+
+    // Get user's choice with real-time 'W' and 'S' key navigation
+    public int getChoice() {
+        while (true) {
+            String input = scanner.nextLine().trim().toUpperCase();
+
+            switch (input) {
+                case "W": // Move up
+                    selectedOption = (selectedOption - 1 + menuOptions.length) % menuOptions.length;
+                    break;
+                case "S": // Move down
+                    selectedOption = (selectedOption + 1) % menuOptions.length;
+                    break;
+                case "": // Enter key pressed
+                    return selectedOption + 1; // Return the selected option
+                default:
+                    System.out.println(RED + "Invalid input. Use 'W' or 'S'." + RESET);
+            }
+
+            clearScreen();
+            displayMenu();
+        }
     }
 
     // Display a list of items with a bit of formatting
@@ -62,10 +97,6 @@ public class ConsoleView {
         }
     }
 
-    // Get user's choice from the menu
-    public int getChoice() {
-        return scanner.nextInt();
-    }
 
     // Prompt the user for item details to add or update an item
     public Item getItemDetails() {
