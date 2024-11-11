@@ -1,8 +1,12 @@
 package com.example.pawnshop.view;
 
 import com.example.pawnshop.model.Item;
+
 import java.util.List;
 import java.util.Scanner;
+
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
 
 public class ConsoleView {
 
@@ -34,6 +38,7 @@ public class ConsoleView {
 
     // Display a list of items with a bit of formatting
     public void displayItems(List<Item> items) {
+        showLoading();
         if (items.isEmpty()) {
             System.out.println(RED + "No items available." + RESET);
         } else {
@@ -80,6 +85,7 @@ public class ConsoleView {
 
     // Display sorting options with a box
     public void displaySortMenu() {
+        clearScreen();
         System.out.println(CYAN + "==================== Sort Options ====================" + RESET);
         System.out.println("| " + GREEN + "1." + RESET + " Sort by ID (Ascending)        |");
         System.out.println("| " + GREEN + "2." + RESET + " Sort by ID (Descending)       |");
@@ -97,6 +103,7 @@ public class ConsoleView {
 
     // Display transaction history in a box
     public void displayHistory(List<String> history) {
+        showLoading();
         if (history.isEmpty()) {
             System.out.println(RED + "No history available." + RESET);
         } else {
@@ -106,5 +113,59 @@ public class ConsoleView {
             }
             System.out.println("============================================================");
         }
+    }
+
+    // Simulate the clearing of the screen
+    public static void clearScreen() {
+        try {
+            // Create Robot instance to simulate key press
+            Robot robot = new Robot();
+
+            // Simulate pressing Ctrl + ; (this clears the screen in some terminals like IntelliJ)
+            robot.keyPress(KeyEvent.VK_CONTROL);  // Press Ctrl
+            robot.keyPress(KeyEvent.VK_SEMICOLON); // Press ;
+
+            // Release the keys
+            robot.keyRelease(KeyEvent.VK_SEMICOLON); // Release ;
+            robot.keyRelease(KeyEvent.VK_CONTROL);  // Release Ctrl
+
+            // You can use a delay to ensure the terminal clears properly
+            Thread.sleep(5);  // Short delay to allow the screen to clear
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Simulate the loading progress with ASCII art
+    public static void showLoading() {
+        String[] loadingStates = {
+                "[          ]",
+                "[=         ]",
+                "[==        ]",
+                "[===       ]",
+                "[====      ]",
+                "[=====     ]",
+                "[======    ]",
+                "[=======   ]",
+                "[========  ]",
+                "[========= ]",
+                "[==========]"
+        };
+        clearScreen();
+        // Simulate a 5-second loading progress with delays
+        for (int i = 0; i < loadingStates.length; i++) {
+            // Print the loading bar on the same line using \r (carriage return)
+            System.out.print("\rLoading... " + loadingStates[i]);  // Overwrite the previous line
+            try {
+                Thread.sleep(500);  // Delay of 500ms (half a second) between each update
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        clearScreen();
+        // After the progress is complete, print the completion message
+        System.out.println();  // Move to the next line after the loading bar is complete
+        System.out.println("Loading Complete!");
     }
 }
