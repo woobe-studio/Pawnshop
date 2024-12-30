@@ -1,0 +1,189 @@
+/* Global font settings */
+* {
+  -fx-font-family: Arial, sans-serif;
+  -fx-font-size: 14px;
+}
+
+/* TableView styling */
+.table-view {
+  -fx-background-color: #ffffff; /* White background for the table */
+  -fx-border-color: #cccccc; /* Light gray border color */
+  -fx-border-width: 1px;
+  -fx-padding: 10px;
+}
+
+/* TableView row styling */
+.table-view .table-row-cell {
+  -fx-background-color: #ffffff; /* White background for each row */
+  -fx-text-fill: black; /* Default text color */
+}
+
+/* Hover effect for table rows */
+.table-view .table-row-cell:hover {
+  -fx-text-fill: blue; /* Change text color to blue when hovered */
+}
+
+/* Selected row in TableView */
+.table-view .table-row-cell:selected {
+  -fx-background-color: #d3d3d3; /* Light gray background for selected rows */
+  -fx-text-fill: blue; /* Blue text color for selected rows */
+  -fx-border-color: blue; /* Blue border around selected row */
+}
+
+/* TableView header styling */
+.table-view .column-header {
+  -fx-background-color: #f1f1f1; /* Light gray background for headers */
+  -fx-text-fill: #333333; /* Dark text color for headers */
+}
+
+/* TableView column header cell */
+.table-view .column-header .label {
+  -fx-font-weight: bold; /* Bold font for column headers */
+}
+
+/* Button styling */
+.button {
+  -fx-padding: 10px 20px;
+  -fx-font-size: 14px;
+  -fx-border-radius: 5px;
+  -fx-background-radius: 5px;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+}
+
+/* Button background color styling */
+.button {
+  -fx-background-color: #4caf50; /* Green background for 'Add' button */
+}
+
+.button:hover {
+  -fx-background-color: #45a049; /* Darker green on hover */
+}
+
+.button:pressed {
+  -fx-background-color: darkgreen; /* Dark green when pressed */
+}
+
+/* Specific button colors */
+.button.update {
+  -fx-background-color: #2196f3; /* Blue background for 'Update' button */
+}
+
+.button.update:hover {
+  -fx-background-color: #0b7dda; /* Darker blue on hover */
+}
+
+.button.update:pressed {
+  -fx-background-color: #0b5b8e; /* Darker blue when pressed */
+}
+
+.button.remove {
+  -fx-background-color: #f44336; /* Red background for 'Remove' button */
+}
+
+.button.remove:hover {
+  -fx-background-color: #e53935; /* Darker red on hover */
+}
+
+.button.remove:pressed {
+  -fx-background-color: #b71c1c; /* Darker red when pressed */
+}
+
+.button.history {
+  -fx-background-color: #ffc107; /* Yellow background for 'View History' button */
+}
+
+.button.history:hover {
+  -fx-background-color: #ffb300; /* Darker yellow on hover */
+}
+
+.button.history:pressed {
+  -fx-background-color: #ff8f00; /* Darker yellow when pressed */
+}
+
+.button.sort {
+  -fx-background-color: #9e9e9e; /* Grey background for 'Sort Items' button */
+}
+
+.button.sort:hover {
+  -fx-background-color: #757575; /* Darker grey on hover */
+}
+
+.button.sort:pressed {
+  -fx-background-color: #616161; /* Darker grey when pressed */
+}
+
+/* Layout styling */
+.vbox {
+  -fx-padding: 20px;
+  -fx-background-color: #f5f5f5; /* Light gray background for the main layout */
+}
+
+/* Styling for the text fields (ID, Name, Category, Value) */
+.text-field {
+  -fx-padding: 5px 10px;
+  -fx-border-radius: 5px;
+  -fx-border-color: #cccccc; /* Light gray border */
+  -fx-background-color: #ffffff; /* White background */
+}
+
+/* Placeholder styling for text fields */
+.text-field .text {
+  -fx-opacity: 0.7;
+}
+
+/* Focused text fields (when clicked on) */
+.text-field:focused {
+  -fx-border-color: #2196f3; /* Blue border when focused */
+}
+
+/* Label styling */
+.label {
+  -fx-font-weight: bold; /* Bold labels for section titles */
+  -fx-font-size: 16px;
+  -fx-text-fill: #333333; /* Dark text color */
+}
+
+/* Styling for ChoiceBox (for sorting) */
+.choice-box {
+  -fx-background-color: #ffffff; /* White background for the ChoiceBox */
+  -fx-border-radius: 5px;
+  -fx-border-color: #cccccc; /* Light gray border */
+}
+
+/* Padding for layout sections */
+.hbox {
+  -fx-spacing: 10px; /* Add spacing between elements */
+}
+
+/* Styling for row selection in TableView */
+.table-view .table-row-cell:focused {
+  -fx-border-color: blue; /* Blue border around the selected row */
+}
+
+/* Button container (e.g., Add, Update, etc.) */
+.hbox .button {
+  -fx-font-size: 14px;
+  -fx-padding: 8px 15px;
+}
+
+/* Styling for the sort choice box */
+.choice-box {
+  -fx-background-color: #f1f1f1; /* Light gray background for the ChoiceBox */
+  -fx-border-color: #cccccc; /* Light gray border for the ChoiceBox */
+  -fx-border-radius: 5px;
+}
+
+/* Styling for the input fields in the HBox (ID, Name, Category, Value) */
+.hbox .text-field {
+  -fx-background-color: #ffffff;
+  -fx-border-color: #cccccc;
+  -fx-border-radius: 5px;
+  -fx-padding: 5px;
+}
+
+/* Styling for TableView rows when selected */
+.table-view .table-row-cell:selected {
+  -fx-background-color: #0f91ae; /* Light gray background for selected rows */
+  -fx-text-fill: rgb(0, 114, 155); /* Blue text color for selected rows */
+}

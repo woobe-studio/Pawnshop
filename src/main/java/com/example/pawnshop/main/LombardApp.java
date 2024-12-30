@@ -1,7 +1,5 @@
 package com.example.pawnshop.main;
 
-import java.applet.Applet;
-
 import com.example.pawnshop.controller.LombardController;
 import com.example.pawnshop.model.LombardRepository;
 import com.example.pawnshop.model.TransactionHistory;
@@ -9,24 +7,16 @@ import com.example.pawnshop.model.Item;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import javafx.geometry.Insets;
-import java.applet.Applet;
-import java.applet.AudioClip;
+import javafx.scene.input.MouseEvent;
+
+import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
 
 public class LombardApp extends Application {
 
@@ -44,12 +34,18 @@ public class LombardApp extends Application {
         TextField categoryField = new TextField();
         TextField valueField = new TextField();
         ChoiceBox<String> sortChoiceBox = new ChoiceBox<>();
+        Button addButton = new Button("Add Item");
+        Button updateButton = new Button("Update Item");
+        Button removeButton = new Button("Remove Item");
+        Button viewHistoryButton = new Button("View History");
+        Button sortButton = new Button("Sort Items");
 
         LombardController controller = new LombardController(repository, tableView, idField, nameField, categoryField, valueField, sortChoiceBox, transactionHistory);
 
         // Setup UI Layout
-        VBox mainLayout = new VBox(10);
-        mainLayout.setPadding(new Insets(10));
+        VBox mainLayout = new VBox(20);
+        mainLayout.setPadding(new Insets(20));
+        mainLayout.setStyle("-fx-background-color: #f5f5f5;");
 
         // Setup TableView Columns
         TableColumn<Item, Integer> idColumn = new TableColumn<>("ID");
@@ -69,16 +65,16 @@ public class LombardApp extends Application {
 
         tableView.getColumns().addAll(idColumn, nameColumn, categoryColumn, valueColumn, statusColumn);
         tableView.setItems(FXCollections.observableArrayList(repository.getItems()));
-        
+
         // Allow table columns to resize with the window
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         // Input Fields and Buttons
         HBox inputLayout = new HBox(10);
-        inputLayout.setHgrow(idField, Priority.ALWAYS); 
-        inputLayout.setHgrow(nameField, Priority.ALWAYS); 
-        inputLayout.setHgrow(categoryField, Priority.ALWAYS); 
-        inputLayout.setHgrow(valueField, Priority.ALWAYS); 
+        inputLayout.setHgrow(idField, Priority.ALWAYS);
+        inputLayout.setHgrow(nameField, Priority.ALWAYS);
+        inputLayout.setHgrow(categoryField, Priority.ALWAYS);
+        inputLayout.setHgrow(valueField, Priority.ALWAYS);
 
         idField.setPromptText("ID");
         nameField.setPromptText("Name");
@@ -88,15 +84,14 @@ public class LombardApp extends Application {
         inputLayout.getChildren().addAll(idField, nameField, categoryField, valueField);
 
         HBox buttonLayout = new HBox(10);
-        Button addButton = new Button("Add Item");
-        Button updateButton = new Button("Update Item");
-        Button removeButton = new Button("Remove Item");
-        Button viewHistoryButton = new Button("View History");
-        Button sortButton = new Button("Sort Items");
+        buttonLayout.setSpacing(10);
 
-        buttonLayout.getChildren().addAll(addButton, updateButton, removeButton, viewHistoryButton, sortButton);
+        addButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+        updateButton.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white;");
+        removeButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
+        viewHistoryButton.setStyle("-fx-background-color: #FFC107; -fx-text-fill: white;");
+        sortButton.setStyle("-fx-background-color: #9E9E9E; -fx-text-fill: white;");
 
-        // Event Handlers for Buttons
         addButton.setOnAction(e -> {
             playSound("clickSound.wav");
             controller.addItem();
@@ -118,6 +113,8 @@ public class LombardApp extends Application {
             controller.viewItems();
         });
 
+        buttonLayout.getChildren().addAll(addButton, updateButton, removeButton, viewHistoryButton, sortButton);
+
         // Row selection listener to update input fields
         tableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
@@ -135,26 +132,24 @@ public class LombardApp extends Application {
 
         // Create and set scene
         Scene scene = new Scene(mainLayout, 800, 600);
-
-        // Bind the table width to the main layout's width so that the table adjusts dynamically
-        tableView.prefWidthProperty().bind(mainLayout.widthProperty());
+        scene.getStylesheets().add(new File("styles/styles.css").toURI().toString()); // Applying the CSS stylesheet from the root directory
 
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
+    // Method to play sound
     public void playSound(String soundFilePath) {
-            try {
-                File soundFile = new File("sounds/" + soundFilePath);  // Specify the path to your .wav file
-                AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioStream);
-                clip.start();  // Play the sound
-            } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
-                System.out.println("Error playing sound: " + e.getMessage());
-            }
+        try {
+            File soundFile = new File("sounds/" + soundFilePath);  // Specify the path to your .wav file
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.start();  // Play the sound
+        } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
+            System.out.println("Error playing sound: " + e.getMessage());
+        }
     }
-
 
     public static void main(String[] args) {
         launch(args); // Launch the JavaFX application
