@@ -3,120 +3,160 @@ package com.example.pawnshop.controller;
 import com.example.pawnshop.model.LombardRepository;
 import com.example.pawnshop.model.Item;
 import com.example.pawnshop.model.TransactionHistory;
-import com.example.pawnshop.view.ConsoleView;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.VBox;
 
 public class LombardController {
 
     private LombardRepository repository;
-    private ConsoleView view;
     private TransactionHistory transactionHistory;
 
-    public LombardController(LombardRepository repository, ConsoleView view, TransactionHistory transactionHistory) {
+    private TableView<Item> tableView; // For displaying items
+    private TextField idField, nameField, categoryField, valueField;
+    private ChoiceBox<String> sortChoiceBox;
+
+    public LombardController(LombardRepository repository, TableView<Item> tableView,
+                             TextField idField, TextField nameField, TextField categoryField,
+                             TextField valueField, ChoiceBox<String> sortChoiceBox,
+                             TransactionHistory transactionHistory) {
         this.repository = repository;
-        this.view = view;
+        this.tableView = tableView;
+        this.idField = idField;
+        this.nameField = nameField;
+        this.categoryField = categoryField;
+        this.valueField = valueField;
+        this.sortChoiceBox = sortChoiceBox;
         this.transactionHistory = transactionHistory;
+
+        // Initialize sort options
+        this.sortChoiceBox.setItems(FXCollections.observableArrayList(
+                "Sort by ID (Ascending)", "Sort by ID (Descending)",
+                "Sort by Price (Ascending)", "Sort by Price (Descending)"
+        ));
     }
 
     public void addItem() {
-        Item item = view.getItemDetails();
+        try {
+            int id = Integer.parseInt(idField.getText());
+            String name = nameField.getText();
+            String category = categoryField.getText();
+            double value = Double.parseDouble(valueField.getText());
 
-        // Check for duplicate ID
-        if (repository.getItemById(item.getId()) != null) {
-            view.displayMessage("Error: An item with ID " + item.getId() + " already exists.");
-            return;
+            // Check for duplicate ID
+            if (repository.getItemById(id) != null) {
+                showAlert(AlertType.ERROR, "Error", "An item with ID " + id + " already exists.");
+                return;
+            }
+
+            // Check for non-negative price
+            if (value < 0) {
+                showAlert(AlertType.ERROR, "Error", "Item price must be 0 or higher.");
+                return;
+            }
+
+            Item newItem = new Item(id, name, category, value, "New");
+            repository.addItem(newItem);
+            transactionHistory.addHistory("Added item: " + newItem);
+            refreshTableView();
+            showAlert(AlertType.INFORMATION, "Success", "Item added successfully!");
+
+        } catch (NumberFormatException e) {
+            showAlert(AlertType.ERROR, "Error", "Invalid input. Please check the fields.");
         }
-
-        // Check for non-negative price
-        if (item.getValue() < 0) {
-            view.displayMessage("Error: Item price must be 0 or higher.");
-            return;
-        }
-
-        repository.addItem(item);
-        transactionHistory.addHistory("Added item: " + item);
-        view.displayMessage("Item added successfully!");
     }
 
     public void viewItems() {
-        // Prompt user for sorting choice first
-        view.clearScreen();
-        view.playSound("go.wav");
-        view.displaySortMenu();
-        int choice = view.getSortChoice();
+        int sortChoice = sortChoiceBox.getSelectionModel().getSelectedIndex();
 
-        // Apply sorting based on user choice
-        switch (choice) {
-            case 1:
+        switch (sortChoice) {
+            case 0:
                 repository.sortItemsByIdAscending();
-                view.displayMessage("Items sorted by ID (Ascending).");
+                break;
+            case 1:
+                repository.sortItemsByIdDescending();
                 break;
             case 2:
-                repository.sortItemsByIdDescending();
-                view.displayMessage("Items sorted by ID (Descending).");
+                repository.sortItemsByPriceAscending();
                 break;
             case 3:
-                repository.sortItemsByPriceAscending();
-                view.displayMessage("Items sorted by Price (Ascending).");
-                break;
-            case 4:
                 repository.sortItemsByPriceDescending();
-                view.displayMessage("Items sorted by Price (Descending).");
                 break;
-            case 5:
-                view.displayMessage("Items not sorted.");
-                break;
-            case 6:
-                view.playSound("go.wav");
-                return;
             default:
-                view.displayMessage("Invalid choice.");
-                return;
+                // No sorting
+                break;
         }
 
-        // Now display the sorted items
-        view.displayItems(repository.getItems());
+        refreshTableView();
     }
 
     public void updateItem() {
-        int id = view.getItemId();
-        Item existingItem = repository.getItemById(id);
+        try {
+            int id = Integer.parseInt(idField.getText());
+            String newName = nameField.getText();
+            String newCategory = categoryField.getText();
+            double newValue = Double.parseDouble(valueField.getText());
 
-        if (existingItem == null) {
-            view.displayMessage("Error: Item not found.");
-            return;
+            // Validate item existence
+            Item existingItem = repository.getItemById(id);
+            if (existingItem == null) {
+                showAlert(AlertType.ERROR, "Error", "Item with ID " + id + " not found.");
+                return;
+            }
+
+            // Check for non-negative price
+            if (newValue < 0) {
+                showAlert(AlertType.ERROR, "Error", "Item price must be 0 or higher.");
+                return;
+            }
+
+            repository.updateItem(id, newName, newCategory, newValue);
+            transactionHistory.addHistory("Updated item ID " + id + ": " + existingItem);
+            refreshTableView();
+            showAlert(AlertType.INFORMATION, "Success", "Item updated successfully!");
+
+        } catch (NumberFormatException e) {
+            showAlert(AlertType.ERROR, "Error", "Invalid input. Please check the fields.");
         }
-
-        view.displayMessage("Updating item: " + existingItem);
-        Item updatedItem = view.getItemDetails();
-
-        // Check for non-negative price on update
-        if (updatedItem.getValue() < 0) {
-            view.displayMessage("Error: Item price must be 0 or higher.");
-            return;
-        }
-
-        repository.updateItem(id, updatedItem.getName(), updatedItem.getCategory(), updatedItem.getValue());
-        transactionHistory.addHistory("Updated item ID " + id + ": " + updatedItem);
-        view.displayMessage("Item updated successfully!");
     }
 
     public void removeItem() {
-        int id = view.getItemId();
-        Item item = repository.getItemById(id);
-        if (item != null) {
-            repository.removeItem(id);
-            transactionHistory.addHistory("Removed item ID " + id + ": " + item); // Record the removal
-            view.displayMessage("Item removed successfully!");
-        } else {
-            view.displayMessage("Item not found!");
+        try {
+            int id = Integer.parseInt(idField.getText());
+            Item item = repository.getItemById(id);
+            if (item != null) {
+                repository.removeItem(id);
+                transactionHistory.addHistory("Removed item ID " + id + ": " + item);
+                refreshTableView();
+                showAlert(AlertType.INFORMATION, "Success", "Item removed successfully!");
+            } else {
+                showAlert(AlertType.ERROR, "Error", "Item with ID " + id + " not found.");
+            }
+        } catch (NumberFormatException e) {
+            showAlert(AlertType.ERROR, "Error", "Invalid input. Please enter a valid ID.");
         }
     }
 
-    public void exit() {
-        view.displayMessage("Exiting application. Goodbye!");
+    public void viewTransactionHistory() {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Transaction History");
+        alert.setHeaderText("Transaction History Log");
+        alert.setContentText(String.join("\n", transactionHistory.getHistory()));
+        alert.showAndWait();
     }
 
-    public void viewTransactionHistory() {
-        view.displayHistory(transactionHistory.getHistory());
+    private void refreshTableView() {
+        ObservableList<Item> observableItems = FXCollections.observableArrayList(repository.getItems());
+        tableView.setItems(observableItems);
+    }
+
+    private void showAlert(AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
