@@ -8,7 +8,6 @@ module com.example.pawnshop {
     exports com.example.pawnshop.main;       // Export main package for application entry
     exports com.example.pawnshop.controller;  // Export controller package
     exports com.example.pawnshop.model;      // Export model package
-    exports com.example.pawnshop.view;       // Export view package
 
     // Open main package to JavaFX modules
     opens com.example.pawnshop.main to javafx.graphics, javafx.fxml;
